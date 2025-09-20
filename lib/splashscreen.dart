@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movies/page/auth/login_page.dart';
+import 'package:flutter_movies/page/welcome_screen.dart';
 import 'package:flutter_movies/service_locator.dart';
 import 'package:flutter_movies/utils/app_router.dart';
 import 'package:lottie/lottie.dart';
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     print("status $status");
     if(status == AnimationStatus.completed) {
       await Future.delayed(const Duration(seconds: 2), () {
-        _router.navigateTo(const LoginPage());
+        _router.navigateTo(const WelcomeScreen());
       });
     }
   }

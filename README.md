@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+## Check My Profile
+
+A senior mobile engineer - [Dika Alfarell](https://alramdhan.github.io/web-profile)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
@@ -15,6 +19,3 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-### Check My Profile
-
-[Dika Alfarell](https://alramdhan.github.io/web-profile)

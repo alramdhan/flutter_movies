@@ -10,9 +10,41 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Center(
-        child: Text("login"),
+        child: Form(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Login",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                Text("Welcome back!"),
+                const SizedBox(height: 20),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    label: Text("Username"),
+                    filled: true
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    label: Text("Password"),
+                    filled: true
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(onPressed: () {}, child: const Text("Login"))
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
