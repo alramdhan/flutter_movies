@@ -44,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
             alignment: Alignment.bottomCenter,
             children: [
               Container(
-                height: size.height * .715,
+                height: size.height * .735,
                 width: size.width * .915,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor.withAlpha(125),
@@ -52,7 +52,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 ),
               ),
               Container(
-                height: size.height * .7,
+                height: size.height * .72,
                 width: size.width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
