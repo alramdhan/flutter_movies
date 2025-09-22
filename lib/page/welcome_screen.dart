@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_movies/page/auth/login_page.dart';
-import 'package:flutter_movies/service_locator.dart';
-import 'package:flutter_movies/utils/app_color.dart';
-import 'package:flutter_movies/utils/app_router.dart';
+import 'package:flutter_movies/utils/themes/app_color.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -13,41 +10,53 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
-  // bool _bottomSheet = false;
+class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin {
+  bool _showBS = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController? _bottomSheetController;
-  late final AppRouter _router;
+  late final AnimationController _animationController;
 
   @override
   void initState() {
     // TODO: implement initState
+    _animationController = AnimationController(vsync: this, duration: 800.ms);
     super.initState();
+    _animationController.addStatusListener(_acStatusListener);
+  }
+
+  void _acStatusListener(AnimationStatus status) {
+    print("Status: $status");
+    if(status == AnimationStatus.dismissed) {
+      setState(() {
+        _showBS = false;
+      });
+    }
   }
 
   void _openBottomForm({required bool loginForm, required bool show}) {
     if(show) {
       _bottomSheetController = _scaffoldKey.currentState?.showBottomSheet(
         // showDragHandle: true,
+        transitionAnimationController: _animationController,
         (context) {
           final Size size = MediaQuery.sizeOf(context);
           return Stack(
             alignment: Alignment.bottomCenter,
             children: [
               Container(
-                height: size.height * .72,
-                width: size.width * .90,
-                decoration: const BoxDecoration(
-                  color: Colors.white54,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(10))
+                height: size.height * .715,
+                width: size.width * .915,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor.withAlpha(125),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(25))
                 ),
               ),
               Container(
                 height: size.height * .7,
                 width: size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(15))
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15))
                 ),
                 child: loginForm ? const LoginPage() : const Text("Bottom"),
               ),
@@ -64,8 +73,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
-
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
@@ -79,59 +86,123 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ],
           ),
         ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Flutter Movies",
-                  style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.secondary
-                  ),
-                ).animate()
-                  .fadeIn(duration: 800.ms, begin: 0)
-                  .slideY(duration: 800.ms, begin: -0.1, end: 0),
-                const SizedBox(height: 64),
-                OutlinedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(60),
-                    side: const BorderSide(width: 4, color: AppColor.light)
-                  ),
-                  onPressed: () {
-                    _openBottomForm(loginForm: true, show: true);
-                  },
-                  child: const Text("Sign In",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: AppColor.light
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: MediaQuery.sizeOf(context).height * .09,
+              left: 10,
+              right: 20,
+              child: AnimatedOpacity(
+                opacity: _showBS ? 1 : 0,
+                duration: const Duration(milliseconds: 800),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _showBS = false;
+                          _openBottomForm(loginForm: true, show: false);  
+                        });
+                      },
+                      icon: const Icon(Icons.arrow_back, color: AppColor.light),
                     ),
-                  ),
-                ).animate()
-                  .fadeIn(duration: 800.ms, delay: 500.ms, begin: 0)
-                  .slideY(duration: 800.ms, delay: 500.ms, begin: -0.1, end: 0),
-                const SizedBox(height: 32),
-                OutlinedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(60),
-                    side: const BorderSide(width: 4, color: AppColor.light)
-                  ),
-                  onPressed: () {
-                    _openBottomForm(loginForm: false, show: true);
-                  },
-                  child: const Text("Sign Up",
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: AppColor.light
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Doesn't have an account?",
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: AppColor.light,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          width: 100,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColor.light.withAlpha(200),
+                              minimumSize: const Size.fromHeight(40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6)
+                              ),
+                              padding: EdgeInsets.zero
+                            ),
+                            onPressed: () {
+                              _openBottomForm(loginForm: true, show: false);
+                            },
+                            child: const Text("Sign Up",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.primary
+                              ),
+                            )
+                          ),
+                        )
+                      ],
                     ),
-                  ),
-                ).animate()
-                  .fadeIn(duration: 800.ms, delay: 1000.ms, begin: 0)
-                  .slideY(duration: 800.ms, delay: 1000.ms, begin: -0.1, end: 0),
-              ],
+                  ],
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Flutter Movies",
+                    style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.secondary
+                    ),
+                  ).animate()
+                    .fadeIn(duration: 800.ms, begin: 0)
+                    .slideY(duration: 800.ms, begin: -0.1, end: 0),
+                  const SizedBox(height: 64),
+                  OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(60),
+                      side: const BorderSide(width: 4, color: AppColor.light)
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showBS = true;
+                        _openBottomForm(loginForm: true, show: true);
+                      });
+                    },
+                    child: const Text("Sign In",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: AppColor.light
+                      ),
+                    ),
+                  ).animate()
+                    .fadeIn(duration: 800.ms, delay: 500.ms, begin: 0)
+                    .slideY(duration: 800.ms, delay: 500.ms, begin: -0.1, end: 0),
+                  const SizedBox(height: 32),
+                  OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(60),
+                      side: const BorderSide(width: 4, color: AppColor.light)
+                    ),
+                    onPressed: () {
+                      _openBottomForm(loginForm: false, show: true);
+                    },
+                    child: const Text("Sign Up",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: AppColor.light
+                      ),
+                    ),
+                  ).animate()
+                    .fadeIn(duration: 800.ms, delay: 1000.ms, begin: 0)
+                    .slideY(duration: 800.ms, delay: 1000.ms, begin: -0.1, end: 0),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

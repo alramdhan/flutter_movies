@@ -10,7 +10,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.sizeOf(context);
     return Center(
       child: Form(
         child: Padding(
@@ -19,10 +18,17 @@ class _LoginPageState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Login",
-                style: Theme.of(context).textTheme.titleLarge,
+              Text("Log In",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface
+                )
               ),
-              const Text("Welcome back!"),
+              Text("Welcome back!",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface
+                )
+              ),
               const SizedBox(height: 20),
               TextFormField(
                 decoration: const InputDecoration(
