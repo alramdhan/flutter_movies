@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_movies/page/auth/login_page.dart';
+import 'package:flutter_movies/page/auth/signup_page.dart';
 import 'package:flutter_movies/utils/themes/app_color.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateMixin {
   bool _showBS = false;
+  bool _login = true;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   PersistentBottomSheetController? _bottomSheetController;
   late final AnimationController _animationController;
@@ -34,6 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   }
 
   void _openBottomForm({required bool loginForm, required bool show}) {
+    _login = loginForm;
     if(show) {
       _bottomSheetController = _scaffoldKey.currentState?.showBottomSheet(
         // showDragHandle: true,
@@ -44,7 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
             alignment: Alignment.bottomCenter,
             children: [
               Container(
-                height: size.height * .735,
+                height: size.height * .755,
                 width: size.width * .915,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor.withAlpha(125),
@@ -52,13 +55,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 ),
               ),
               Container(
-                height: size.height * .72,
+                height: size.height * .74,
                 width: size.width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(15))
                 ),
-                child: loginForm ? const LoginPage() : const Text("Bottom"),
+                child: loginForm ? const LoginPage() : const SignupPage(),
               ),
             ],
           );
@@ -74,6 +77,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       body: Container(
         decoration: const BoxDecoration(
@@ -82,7 +86,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
             end: Alignment.bottomRight,
             colors: [
               AppColor.primary,
-              AppColor.teal
+              AppColor.secondary
             ],
           ),
         ),
@@ -104,17 +108,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                       onPressed: () {
                         setState(() {
                           _showBS = false;
-                          _openBottomForm(loginForm: true, show: false);  
+                          _openBottomForm(loginForm: _login, show: false);
                         });
                       },
-                      icon: const Icon(Icons.arrow_back, color: AppColor.light),
+                      icon: const Icon(Icons.chevron_left, color: AppColor.dark),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Doesn't have an account?",
+                        Text(_login ? "Doesn't have an account?" : "Already have an account?",
                           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: AppColor.light,
+                            color: AppColor.dark,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -122,21 +126,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                           width: 100,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.light.withAlpha(200),
+                              backgroundColor: AppColor.light.withAlpha(100),
+                              elevation: 0,
                               minimumSize: const Size.fromHeight(40),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6)
                               ),
                               padding: EdgeInsets.zero
                             ),
-                            onPressed: () {
-                              _openBottomForm(loginForm: true, show: false);
+                            onPressed: () async {
+                              _bottomSheetController?.close();
+                              await _bottomSheetController?.closed;
+                              _bottomSheetController = null;
+                              await Future.delayed(800.ms);
+                              setState(() {
+                                _showBS = true;
+                                _openBottomForm(loginForm: !_login, show: true);
+                              });
                             },
-                            child: const Text("Sign Up",
-                              style: TextStyle(
+                            child: Text(_login ? "Sign Up" : "Sign In",
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: AppColor.primary
+                                color: AppColor.dark
                               ),
                             )
                           ),
@@ -155,7 +167,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                   Text("Flutter Movies",
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColor.secondary
+                      color: AppColor.light
                     ),
                   ).animate()
                     .fadeIn(duration: 800.ms, begin: 0)
@@ -188,7 +200,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                       side: const BorderSide(width: 4, color: AppColor.light)
                     ),
                     onPressed: () {
-                      _openBottomForm(loginForm: false, show: true);
+                      setState(() {
+                        _showBS = true;
+                        _openBottomForm(loginForm: false, show: true);
+                      });
                     },
                     child: const Text("Sign Up",
                       style: TextStyle(

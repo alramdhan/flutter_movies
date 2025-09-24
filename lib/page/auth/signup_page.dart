@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_movies/page/auth/widgets/text_form_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _fullNameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -65,10 +67,17 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 MTextFField(
-                  controller: _usernameController,
+                  controller: _fullNameController,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
-                  label: "Email or Username",
+                  label: "Full Name",
+                ),
+                const SizedBox(height: 20),
+                MTextFField(
+                  controller: _emailController,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.emailAddress,
+                  label: "Email",
                 ),
                 const SizedBox(height: 20),
                 MTextFField(
@@ -81,27 +90,27 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: doLogin,
-                  child: const Text("Sign In",
+                  child: const Text("Sign Up",
                     style: TextStyle(
                       fontSize: 16
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                Center(
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text("Forgot your password?")
-                  ),
-                ),
-                const SizedBox(height: 20),
+                // Center(
+                //   child: TextButton(
+                //     onPressed: () {},
+                //     child: const Text("Forgot your password?")
+                //   ),
+                // ),
+                // const SizedBox(height: 20),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     line,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text("Or sign in with",
+                      child: Text("Or sign up with",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface
                         ),
