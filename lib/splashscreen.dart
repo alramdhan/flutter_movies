@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movies/page/welcome_screen.dart';
+import 'package:flutter_movies/presentation/welcome_screen.dart';
 import 'package:flutter_movies/service_locator.dart';
 import 'package:flutter_movies/utils/app_router.dart';
 import 'package:lottie/lottie.dart';

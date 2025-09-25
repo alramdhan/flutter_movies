@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movies/page/auth/widgets/text_form_field.dart';
+import 'package:flutter_movies/presentation/home/home_page.dart';
+import 'package:flutter_movies/service_locator.dart';
+import 'package:flutter_movies/utils/app_router.dart';
+import 'package:flutter_movies/utils/widgets/text_form_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +15,13 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  late final AppRouter _router;
+
+  @override
+  void initState() {
+    _router = sl<AppRouter>();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -22,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void doLogin() {
     if(_formKey.currentState!.validate()) {
-    
+      _router.navigateTo(const HomePage());
     }
   }
 

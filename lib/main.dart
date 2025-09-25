@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movies/service_locator.dart';
+import 'package:flutter_movies/service_locator.dart' as di;
 import 'package:flutter_movies/splashscreen.dart';
 import 'package:flutter_movies/utils/app_router.dart';
 import 'package:flutter_movies/utils/themes/app_theme.dart';
 
 void main() {
-  setupServiceLocator();
+  di.setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: sl<AppRouter>().navigatorKey,
+      navigatorKey: di.sl<AppRouter>().navigatorKey,
       title: 'Flutter Demo',
       themeMode: _themeMode,
       theme: AppTheme.themeLight,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_movies/page/auth/login_page.dart';
-import 'package:flutter_movies/page/auth/signup_page.dart';
+import 'package:flutter_movies/presentation/auth/login_page.dart';
+import 'package:flutter_movies/presentation/auth/signup_page.dart';
 import 'package:flutter_movies/utils/themes/app_color.dart';
 
 class WelcomeScreen extends StatefulWidget {
